@@ -30,3 +30,6 @@ media/
 
 # Environment variables (if you use one)
 .env
+
+# Static Files
+/staticfiles/

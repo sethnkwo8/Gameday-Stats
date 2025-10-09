@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link" href="#about">About</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#services">Services</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#contact">Contact</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+<header class="text-white text-center position-relative"
+        style="padding: 6rem 0;
+               background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), no-repeat center center;
+               background-size: cover;">
+    <div class="container px-4">
+        <h1 class="fw-bolder display-4">GameDay Stats</h1>
+        <p class="lead fs-4">Track NBA & Top 5 Football Leagues Fixtures, Live Scores & Player Stats</p>
+        <div class="mt-4">
+            <a class="btn btn-lg btn-light me-2 shadow-sm" href="{% url 'football:index' %}">
+                ⚽ Football
+            </a>
+            <a class="btn btn-lg btn-light shadow-sm" href="{% url 'nba:index' %}">
+                🏀 NBA
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Sports Cards Section -->
+<section id="sports" class="py-5 bg-light">
+    <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+            <!-- Football Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card text-center shadow-sm border-0 hover-scale">
+                    <div class="card-body">
+                        <h3>Football</h3>
+                        <p>Top 5 leagues fixtures, live scores & player stats.</p>
+                        <a class="btn btn-primary" href="{% url 'football:index' %}">Explore Football</a>
+                    </div>
+                </div>
+            </div>
+            <!-- NBA Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card text-center shadow-sm border-0 hover-scale">
+                    <div class="card-body">
+                        <h3>NBA</h3>
+                        <p>Track games, scores, and player stats for the season.</p>
+                        <a class="btn btn-primary" href="{% url 'nba:index' %}">Explore NBA</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-5">
+    <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2>About GameDay Stats</h2>
+                <p class="lead">
+                    GameDay Stats is your one-stop platform to stay updated on NBA and top football leagues action.  
+                    Follow upcoming fixtures, live scores, and player statistics all in one place.  
+                    Whether you’re tracking your favorite team or checking player performance, we make sports data simple, fast, and accessible.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="bg-light py-5">
+    <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2>What We Offer</h2>
+                <ul class="list-unstyled lead">
+                    <li>⚽ <strong>Fixtures:</strong> Full schedules for NBA and top football leagues.</li>
+                    <li>⏱️ <strong>Live Scores:</strong> Real-time updates on ongoing matches.</li>
+                    <li>📊 <strong>Player Stats:</strong> Track goals, assists, points, and rebounds.</li>
+                    <li>🏆 <strong>Team Overview:</strong> Standings, results, and historical performance.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-5">
+    <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2>Contact Us</h2>
+                <p class="lead">
+                    Have questions, feedback, or ideas? Reach out to the GameDay Stats team!  
+                    We’re always looking to improve the platform and provide the most accurate sports info.
+                </p>
+                <p>Email: <a href="mailto:support@gamedaystats.com">support@gamedaystats.com</a></p>
+                <p>Twitter: <a href="https://twitter.com/gamedaystats">@GameDayStats</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+<!-- Optional custom CSS for small enhancements -->
+<style>
+.hover-scale:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+</style>
