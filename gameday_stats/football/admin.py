@@ -7,9 +7,12 @@ class LeagueModelAdmin(admin.ModelAdmin):
 class TeamModelAdmin(admin.ModelAdmin):
     list_display = ('abbreviation', 'name', 'league', 'api_id')
 
+class PlayerModelAdmin(admin.ModelAdmin):
+    list_display = ('name', 'number', 'team')
+
 # Register your models here.
 admin.site.register(League, LeagueModelAdmin)
 admin.site.register(Team, TeamModelAdmin)
-admin.site.register(Player)
+admin.site.register(Player, PlayerModelAdmin)
 admin.site.register(Match)
 admin.site.register(Player_Stats)

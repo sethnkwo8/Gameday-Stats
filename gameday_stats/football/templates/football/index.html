@@ -29,24 +29,5 @@
             <a class="nav-link disabled">Disabled</a>
         </li>
     </ul>
-
-    <!-- <div class="row row-cols-1 row-cols-md-2 g-4">
-        {% if fixtures %}
-            {% for match in fixtures %}
-            <div class="col">
-                <div class="card h-100 shadow-sm text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ match.home_team }} vs {{ match.away_team }}</h5>
-                        <p><strong>Date:</strong> {{ match.date }}</p>
-                        <p><strong>Status:</strong> {{ match.status }}</p>
-                        <p><strong>Score:</strong> {{ match.score|default:"- : -" }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p class="lead text-center">No fixtures loaded yet. Check back soon!</p>
-        {% endif %}
-    </div> -->
 </div>
 {% endblock %}

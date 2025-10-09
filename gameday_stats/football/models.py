@@ -20,10 +20,15 @@ class Team(models.Model):
         return self.name
 
 class Player(models.Model):
-    name = models.CharField(max_length=50)
-    postion = models.CharField(max_length=15)
+    name = models.CharField(max_length=50, null=True)
+    position = models.CharField(max_length=15, null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team")
-    nationality = models.CharField(max_length=20)
+    age = models.IntegerField(max_length=3, null=True)
+    number = models.IntegerField(max_length=3, null=True)
+    photo = models.ImageField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 class Match(models.Model):
     STATUS_CHOICES = [
