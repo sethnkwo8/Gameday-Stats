@@ -2,32 +2,30 @@
 {% load static %}
 {% block body %}
 <div class="container py-5" style="margin-top: 20px;">
-    <h1 class="mb-4 text-center">Football Fixtures</h1>
+    <h1 class="mb-4 text-center">Football⚽</h1>
 
     <div class="mb-4 text-center">
-        <select class="form-select w-50 mx-auto">
-            <option selected>Choose League</option>
-            <option value="premier-league">Premier League</option>
-            <option value="la-liga">La Liga</option>
-            <option value="serie-a">Serie A</option>
-            <option value="bundesliga">Bundesliga</option>
-            <option value="ligue-1">Ligue 1</option>
-        </select>
+        <form>
+            {% csrf_token %}
+            {{form.as_p}}
+        </form>
     </div>
 
     <ul class="nav justify-content-center">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Active</a>
+        <li class="nav-item nav-pills nav-fill">
+            <a class="nav-link active" aria-current="page" href="#">Matches</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Table</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Teams</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
+            <a class="nav-link disabled">Players</a>
         </li>
     </ul>
+
+    <div id="info"></div>
 </div>
 {% endblock %}

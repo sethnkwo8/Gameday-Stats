@@ -5,7 +5,7 @@ class LeagueModelAdmin(admin.ModelAdmin):
     list_display = ('name', 'country', 'season')
 
 class TeamModelAdmin(admin.ModelAdmin):
-    list_display = ('abbreviation', 'name', 'league', 'api_id')
+    list_display = ('abbreviation', 'name', 'league')
 
 class PlayerModelAdmin(admin.ModelAdmin):
     list_display = ('name', 'number', 'team')

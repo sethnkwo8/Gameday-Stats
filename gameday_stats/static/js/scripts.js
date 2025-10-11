@@ -31,4 +31,8 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     });
 
+    const league_select = document.querySelector('#league_select');
+    const infoDiv = document.querySelector('#info');
+
+
 });
