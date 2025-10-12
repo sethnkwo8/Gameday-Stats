@@ -11,21 +11,44 @@
         </form>
     </div>
 
-    <ul class="nav justify-content-center">
-        <li class="nav-item nav-pills nav-fill">
-            <a class="nav-link active" aria-current="page" href="#">Matches</a>
+    <ul class="nav nav-pills justify-content-center" id="select_content">
+        <li class="nav-item">
+            <a class="nav-link active" data-section="matches" href="#">Matches</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Table</a>
+            <a class="nav-link" data-section="standings" href="#">Standings</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Teams</a>
+            <a class="nav-link" data-section="teams" href="#">Teams</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link disabled">Players</a>
+            <a class="nav-link" data-section="players" href="#">Players</a>
         </li>
     </ul>
 
-    <div id="info"></div>
+    <div id="matches-section" class="section"></div>
+
+    <div id="standings-section" class="section">
+        <table class="table table-bordered" id="standingsTable">
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Played</th>
+                    <th>W</th>
+                    <th>D</th>
+                    <th>L</th>
+                    <th>Pts</th>
+                    <th>GF</th>
+                    <th>GA</th>
+                    <th>GD</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="teams-section" class="section"></div>
+    <div id="players-section" class="section"></div>
 </div>
 {% endblock %}
