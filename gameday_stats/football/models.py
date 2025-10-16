@@ -6,6 +6,7 @@ class League(models.Model):
     country = models.CharField(max_length=20)
     season = models.CharField(max_length=20)
     api_id_football_data = models.IntegerField(unique=True, null=True)
+    current_matchday = models.IntegerField(null=True)
 
     def __str__(self):
         return self.name
@@ -17,6 +18,8 @@ class Team(models.Model):
     name = models.CharField(max_length=30)
     league = models.ForeignKey(League, on_delete=models.CASCADE, related_name='league')
     logo = models.URLField(null=True)
+    coach_name = models.CharField(null=True)
+    venue = models.CharField(null=True)
 
     def __str__(self):
         return self.name
@@ -28,37 +31,49 @@ class Player(models.Model):
     age = models.IntegerField(null=True)
     number = models.IntegerField(null=True)
     photo = models.URLField( null=True)
-    api_id_football_id = models.IntegerField(unique=True, null=True)
+    api_id_football_data = models.IntegerField(unique=True, null=True)
 
     def __str__(self):
         return self.name
 
 class Match(models.Model):
     STATUS_CHOICES = [
-        ("Upcoming", "Upcoming"),
+        ("Scheduled", "Scheduled"),
+        ("In Play", "In Play"),
         ("Finished", "Finished"),
-        ("Live", "Live")
+        ("Postponed", "Postponed"),
+        ("Canceled", "Canceled")
     ]
 
+    matchday = models.IntegerField(null=True)
     api_id = models.IntegerField(unique=True, null=True, blank=True)
     league = models.ForeignKey(League, on_delete=models.CASCADE, related_name="league_played")
     home = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="home")
     away = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="away")
-    date = models.DateField()
-    time = models.TimeField()
-    home_score = models.IntegerField(default=0)
-    away_score = models.IntegerField(default=0)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Upcoming")
+    date = models.DateTimeField()
+    home_score = models.IntegerField(null=True, blank=True)
+    away_score = models.IntegerField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Scheduled")
     last_updated = models.DateTimeField(auto_now=True)
 
-class Player_Stats(models.Model):
+    def __str__(self):
+        return f"Matchday {self.matchday} - {self.home.name} ({self.home_score}) v ({self.away_score}) {self.away.name} ({self.league.name})"
+    
+    class Meta:
+        ordering = ["-date"]
+
+class Top_Scorers(models.Model):
+    league = models.ForeignKey(League, on_delete=models.CASCADE, related_name="league_top_scorer", null=True)
     player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="player")
-    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name="match")
-    goals = models.IntegerField()
-    assists = models.IntegerField()
-    saves = models.IntegerField()
-    yellow_cards = models.IntegerField()
-    red_cards = models.IntegerField()
+    goals = models.IntegerField(default=0, null=False)
+    assists = models.IntegerField(default=0, null=False)
+    penalties = models.IntegerField(default=0, null=False)
+
+    def __str__(self):
+        return f"{self.player.name} - {self.goals} goals, {self.assists} assists, {self.penalties} penalties"
+    
+    class Meta:
+        ordering = ["league", "-goals"]
 
 class Standings(models.Model):
     league = models.ForeignKey(League, on_delete=models.CASCADE, related_name="league_standing")

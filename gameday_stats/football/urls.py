@@ -7,5 +7,8 @@ urlpatterns = [
     path("", views.index, name="index" ),
 
     # API Routes
-    path("standings/<int:league_id>", views.standings, name="standings")
+    path("standings/<int:league_id>", views.standings, name="standings"),
+    path("matchday/<int:league_id>/<int:matchday>", views.matchday, name="matchday"),
+    path("teams/<int:league_id>", views.teams, name="teams"),
+    path("top_scorers/<int:league_id>", views.top_scorers, name="top_scorers")
 ]

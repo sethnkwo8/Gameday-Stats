@@ -2,12 +2,12 @@
 {% load static %}
 {% block body %}
 <div class="container py-5" style="margin-top: 20px;">
-    <h1 class="mb-4 text-center">Football⚽</h1>
+    <h1 class="mb-4 text-center">Football⚽ - 25/26</h1>
 
     <div class="mb-4 text-center">
         <form>
             {% csrf_token %}
-            {{form.as_p}}
+            {{league_form.as_p}}
         </form>
     </div>
 
@@ -22,11 +22,27 @@
             <a class="nav-link" data-section="teams" href="#">Teams</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-section="players" href="#">Players</a>
+            <a class="nav-link" data-section="top_scorers" href="#">Top Scorers</a>
         </li>
     </ul>
 
-    <div id="matches-section" class="section"></div>
+    <div id="matches-section" class="section">
+        <div class="mb-4 text-left">
+            <form id="matchday_form">
+                {% csrf_token %}
+                {{matchday_form.matchdays}}
+            </form>
+        </div>
+
+        <div id="navigate_buttons">
+            <div class="btn-group" role="group" aria-label="Default button group">
+                <button type="button" class="btn btn-outline-dark" id="back_button">&lt;</button>
+                <button type="button" class="btn btn-outline-dark" id="forward_button">&gt;</button>
+            </div>
+        </div>
+
+        <div id="matches"></div>
+    </div>
 
     <div id="standings-section" class="section">
         <table class="table table-bordered" id="standingsTable">
@@ -48,7 +64,14 @@
         </table>
     </div>
 
-    <div id="teams-section" class="section"></div>
-    <div id="players-section" class="section"></div>
+    <div id="teams-section" class="section">
+        <div id="teams">
+            <div id="teams_rows" class="row row-cols-1 row-cols-md-2 g-4"></div>
+        </div>
+    </div>
+
+    <div id="scorers-section" class="section">
+        
+    </div>
 </div>
 {% endblock %}

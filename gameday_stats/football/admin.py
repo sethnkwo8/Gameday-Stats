@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import League, Team, Player, Match, Player_Stats
+from .models import League, Team, Player, Match, Top_Scorers
 
 class LeagueModelAdmin(admin.ModelAdmin):
     list_display = ('name', 'country', 'season')
@@ -15,4 +15,4 @@ admin.site.register(League, LeagueModelAdmin)
 admin.site.register(Team, TeamModelAdmin)
 admin.site.register(Player, PlayerModelAdmin)
 admin.site.register(Match)
-admin.site.register(Player_Stats)
+admin.site.register(Top_Scorers)
