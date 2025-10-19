@@ -5,6 +5,8 @@ app_name = "football"
 
 urlpatterns = [
     path("", views.index, name="index" ),
+    path("match/<int:match_id>", views.match_details, name="match_details"),
+    path("<int:team_id>", views.teams_details, name="team_details"),
 
     # API Routes
     path("standings/<int:league_id>", views.standings, name="standings"),

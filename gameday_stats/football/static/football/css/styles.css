@@ -107,3 +107,102 @@
     align-items: center;
     gap: 0.25rem;
 }
+
+.team_icon {
+    text-decoration: none;
+}
+
+/* General section background */
+#players_team-section {
+    background: linear-gradient(180deg, #1a1a1a 0%, #2b2b2b 100%);
+    padding: 50px 20px;
+    border-radius: 12px;
+}
+
+/* Player cards */
+.player-card {
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.player-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Player photo */
+.player-photo-wrapper {
+    width: 120px;
+    height: 120px;
+}
+.player-photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.player-card:hover .player-photo {
+    transform: scale(1.05);
+}
+
+/* Player number badge */
+.player-number {
+    font-weight: 600;
+    border-radius: 0.4rem;
+    padding: 0.3em 0.6em;
+}
+
+/* Button style */
+.btn-outline-light {
+    border-radius: 50px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.btn-outline-light:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Responsive spacing */
+@media (max-width: 576px) {
+    .player-photo-wrapper {
+        width: 90px;
+        height: 90px;
+    }
+    .player-photo {
+        width: 90px;
+        height: 90px;
+    }
+}
+
+
+/* Hide all team sections by default */
+.team_section {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Show only matches section on load */
+#matches_team-section.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Optional: smooth transition when switching */
+.team_section.active {
+    display: block;
+    opacity: 1;
+}
+
+.match-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(255, 255, 255, 0.1);
+    }
+
+.match-card img {
+    object-fit: cover;
+    background-color: #2c2c2c;
+}
+

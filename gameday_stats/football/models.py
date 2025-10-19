@@ -20,6 +20,9 @@ class Team(models.Model):
     logo = models.URLField(null=True)
     coach_name = models.CharField(null=True)
     venue = models.CharField(null=True)
+    founded = models.CharField(null=True)
+    website = models.CharField(null=True)
+    club_colors = models.CharField(null=True)
 
     def __str__(self):
         return self.name

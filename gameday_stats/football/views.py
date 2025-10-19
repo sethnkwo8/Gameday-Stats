@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import HttpResponse, request, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from .forms import LeagueForm, MatchdayForm
@@ -75,6 +76,7 @@ def teams(request, league_id):
     data = []
     for team in league_teams:
         data.append({
+            "team_id":team.pk,
             "team_logo":team.logo,
             "team_name":team.name,
             "team_league": team.league.name,
@@ -83,6 +85,20 @@ def teams(request, league_id):
         })
 
     return JsonResponse({"teams": data})
+
+def teams_details(request, team_id):
+    selected_team = Team.objects.get(pk=team_id)
+    team_matches = Match.objects.filter(
+        Q(home=selected_team) | Q(away=selected_team)
+    ).order_by('date')
+    team_players = Player.objects.filter(team=selected_team).order_by('-photo')
+
+
+    return render(request, "football/team_details.html", {
+        "team":selected_team,
+        "matches":team_matches,
+        "players":team_players
+    })
 
 def top_scorers(request, league_id):
     selected_league = League.objects.get(api_id_football_data = league_id)
@@ -102,3 +118,6 @@ def top_scorers(request, league_id):
         })
 
     return JsonResponse({"scorers": data})
+
+def match_details(request, match_id):
+    return render("football/match_details.html")

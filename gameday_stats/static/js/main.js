@@ -125,38 +125,40 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
     // Handle league selection
-    leagueSelect.addEventListener("change", function () {
-        selected_league_id = this.value;
-        console.log("Selected League:", selected_league_id);
+    if (leagueSelect) {
+        leagueSelect.addEventListener("change", function () {
+            selected_league_id = this.value;
+            console.log("Selected League:", selected_league_id);
 
-        const standingsSection = document.querySelector("#standings-section");
-        const matchdaySection = document.querySelector("#matches-section");
-        const teamsSection = document.querySelector("#teams-section");
+            const standingsSection = document.querySelector("#standings-section");
+            const matchdaySection = document.querySelector("#matches-section");
+            const teamsSection = document.querySelector("#teams-section");
 
-        // If currently viewing standings, reload table
-        if (standingsSection && standingsSection.style.display !== "none") {
-            loadStandings(selected_league_id);
-        }
+            // If currently viewing standings, reload table
+            if (standingsSection && standingsSection.style.display !== "none") {
+                loadStandings(selected_league_id);
+            }
 
-        // If currently viewing matches, reload matches automatically
-        if (matchdaySection && matchdaySection.style.display !== "none") {
-            if (matchdaySelect && matchdaySelect.value) {
-                loadMatches(matchdaySelect.value);
-            } else {
-                matchesContent.innerHTML = "<p>Please select a matchday.</p>";
-            };
-        } ;
+            // If currently viewing matches, reload matches automatically
+            if (matchdaySection && matchdaySection.style.display !== "none") {
+                if (matchdaySelect && matchdaySelect.value) {
+                    loadMatches(matchdaySelect.value);
+                } else {
+                    matchesContent.innerHTML = "<p>Please select a matchday.</p>";
+                };
+            } ;
 
-        // If currently viewing teams reload teams
-        if (teamsSection && teamsSection.style.display !== "none") {
-            loadTeams(selected_league_id)
-        }
+            // If currently viewing teams reload teams
+            if (teamsSection && teamsSection.style.display !== "none") {
+                loadTeams(selected_league_id)
+            }
 
-        // If currently viewing topscorers reload teams
-        if (scorersSection && selected_league_id) {
-            loadScorers(selected_league_id);
-        }
-    });
+            // If currently viewing topscorers reload teams
+            if (scorersSection && selected_league_id) {
+                loadScorers(selected_league_id);
+            }
+        });
+    }
 
     window.addEventListener("load", () => {
         const activeTab = document.querySelector("#select_content .nav-link.active");
@@ -264,19 +266,21 @@ window.addEventListener('DOMContentLoaded', event => {
             data.teams.forEach(item => {
                 const team = `
                     <div class="col-md-3 mb-4">
-                        <div class="card border team-card text-center h-100">
-                            <div class="card-body">
-                                <img src="${item.team_logo}" 
-                                    class="mb-3" 
-                                    alt="${item.team_name} logo" 
-                                    style="width: 60px; height: 60px; object-fit: contain;">
-                                <h5 class="card-title fw-bold text-dark">${item.team_name}</h5>
-                                <p class="text-secondary mb-1">${item.team_league}</p>
-                                <p class="mb-1 text-dark"><strong>Coach:</strong> ${item.team_coach}</p>
-                                <p class="mb-0 text-muted"><small>${item.team_venue}</small></p>
+                        <a href="${item.team_id}" class="team_icon">
+                            <div class="card border team-card text-center h-100">
+                                <div class="card-body">
+                                    <img src="${item.team_logo}" 
+                                        class="mb-3" 
+                                        alt="${item.team_name} logo" 
+                                        style="width: 60px; height: 60px; object-fit: contain;">
+                                    <h5 class="card-title fw-bold text-dark">${item.team_name}</h5>
+                                    <p class="text-secondary mb-1">${item.team_league}</p>
+                                    <p class="mb-1 text-dark"><strong>Coach:</strong> ${item.team_coach}</p>
+                                    <p class="mb-0 text-muted"><small>${item.team_venue}</small></p>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </a>
+                    </div> 
                 `;
                 teamRows.insertAdjacentHTML('beforeend', team);
             });
@@ -341,5 +345,29 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
     // Back and forward button
+    const backBtn = document.querySelector('#back_button');
+    const forwardBtn = document.querySelector('#forward_button')
+
+    if (!matchdaySelect || !backBtn || !forwardBtn) return;
+
+    function updateMatchdaySelect(offset) {
+        let currentIndex = matchdaySelect.selectedIndex;
+        let newIndex = currentIndex + offset
+
+        // If out of bounds
+        if (newIndex < 0) {
+            newIndex = matchdaySelect.options.length - 1;
+        } else if (newIndex >= matchdaySelect.options.length) {
+            newIndex = 0;
+        }
+
+        matchdaySelect.selectedIndex = newIndex;
+
+        const event = new Event("change");
+        matchdaySelect.dispatchEvent(event);
+    }
+
+    backBtn.addEventListener('click', () => updateMatchdaySelect(-1));
+    forwardBtn.addEventListener('click', () => updateMatchdaySelect(1));
 
 });

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ team.name }} | Gameday Stats
+{% endblock %}
+
+{% block body %}
+<div class="container py-5" style="margin-top: 20px;">
+
+    <!-- Back Button -->
+    <p class="mb-4">
+        <a href="javascript:history.back()" class="text-decoration-none">
+            &laquo; Back
+        </a>
+    </p>
+
+    <!-- Team Info -->
+    <div class="text-center mb-5">
+        <img src="{{ team.logo }}" alt="{{ team.name }} logo" 
+             style="width: 100px; height: 100px; object-fit: contain;" class="mb-3">
+        <h1 class="fw-bold">{{ team.name }}</h1>
+        <p class="mb-1"><strong>League:</strong> {{ team.league.name }}</p>
+        {% if team.founded %}
+            <p class="mb-1"><strong>Founded:</strong> {{ team.founded }}</p>
+        {% endif %}
+        {% if team.club_colors %}
+            <p class="mb-1"><strong>Club Colors:</strong> {{ team.club_colors }}</p>
+        {% endif %}
+        {% if team.website %}
+            <p><strong>Website:</strong> 
+                <a href="{{ team.website }}" target="_blank">{{ team.website }}</a>
+            </p>
+        {% endif %}
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-pills justify-content-center my-3" id="team_contentnav">
+        <li class="nav-item">
+            <a class="nav-link active" data-teamsection="matches_team" href="#">Matches</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-teamsection="standings_team" href="#">Standings</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-teamsection="players_team" href="#">Players</a>
+        </li>
+    </ul>
+
+    <!-- Matches Section -->
+    <div id="matches_team-section" class="team_section container my-5">
+        {% if matches %}
+            <div class="row g-4">
+                {% for match in matches %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm match-card text-light" style="background-color: #1f1f1f; border-radius: 15px; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                            <div class="card-body text-center">
+                                <p class="mb-2 text-secondary small">
+                                    <strong>{{ match.date }}</strong> — {{ match.status }}
+                                </p>
+
+                                <div class="d-flex align-items-center justify-content-center mb-3">
+                                    <div class="text-end me-3">
+                                        <img src="{{ match.home.logo }}" width="40" height="40" class="rounded-circle border border-light" alt="{{ match.home.name }}">
+                                        <span class="fw-bold ms-2 text-light">{{ match.home.name }}</span>
+                                    </div>
+                                    <div class="mx-3 fw-bold fs-5 text-white">
+                                        {{ match.home_score|default_if_none:" " }} 
+                                        <span class="text-muted">:</span> 
+                                        {{ match.away_score|default_if_none:" " }}
+                                    </div>
+                                    <div class="text-start ms-3">
+                                        <span class="fw-bold me-2 text-light">{{ match.away.name }}</span>
+                                        <img src="{{ match.away.logo }}" width="40" height="40" class="rounded-circle border border-light" alt="{{ match.away.name }}">
+                                    </div>
+                                </div>
+
+                                <a href="#" class="btn btn-sm btn-outline-light mt-2 rounded-pill px-3">View Match Details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <p class="text-muted">No match data available for this team.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Standings Section -->
+    <div id="standings_team-section" class="team_section">
+        <!-- Will be dynamically filled -->
+    </div>
+
+    <!-- Players Section -->
+    <div id="players_team-section" class="team_section container my-5">
+        <h3 class="text-center mb-4 fw-bold text-uppercase border-bottom pb-2 text-light">
+            Squad Players
+        </h3>
+
+        {% if players %}
+            <div class="row g-4 justify-content-center">
+                {% for player in players %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card player-card shadow-sm border-0 h-100 text-center rounded-4 p-3">
+                            <div class="player-photo-wrapper position-relative mx-auto mb-3">
+                                {% if player.photo %}
+                                    <img src="{{ player.photo }}" 
+                                        alt="{{ player.name }}" 
+                                        class="player-photo rounded-circle border border-3 border-primary">
+                                {% else %}
+                                    <img src="{% static 'img/placeholder.png' %}" 
+                                        alt="{{ player.name }}" 
+                                        class="player-photo rounded-circle border border-3 border-secondary">
+                                {% endif %}
+                                {% if player.number %}
+                                    <span class="player-number badge bg-primary position-absolute top-0 start-0 translate-middle fs-6 shadow">
+                                        #{{ player.number }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title fw-bold text-white mb-1">{{ player.name }}</h5>
+                            <p class="text-light text-opacity-75 small mb-1">{{ player.position|default:"-" }}</p>
+                            <p class="text-light small mb-3"><strong>Age:</strong> {{ player.age|default:"-" }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <p class="text-muted fs-5">No player data available for this team.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/team.js' %}"></script>
+{% endblock %}
