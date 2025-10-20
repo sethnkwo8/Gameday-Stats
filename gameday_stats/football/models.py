@@ -57,6 +57,7 @@ class Match(models.Model):
     home_score = models.IntegerField(null=True, blank=True)
     away_score = models.IntegerField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Scheduled")
+    referee = models.CharField(max_length=60, null=True, blank=True)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -91,3 +92,4 @@ class Standings(models.Model):
     goalsAgainst = models.IntegerField()
     goalDifference = models.IntegerField()
     last_updated = models.DateTimeField(auto_now=True)
+

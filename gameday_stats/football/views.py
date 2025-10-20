@@ -36,6 +36,7 @@ def standings(request, league_id):
     for s in standings:
         data.append({
             "position": s.position,
+            "team_id": s.team.pk,
             "name": s.team.name,
             "logo":s.team.logo,
             "played":s.played,
@@ -64,7 +65,8 @@ def matchday(request, league_id, matchday):
             "away": m.away.name,
             "away_logo":getattr(m.away, "logo", None),
             "away_score": m.away_score,
-            "status": m.status
+            "status": m.status,
+            "referee":m.referee
         })
 
     return JsonResponse({"matches":data})
@@ -91,13 +93,16 @@ def teams_details(request, team_id):
     team_matches = Match.objects.filter(
         Q(home=selected_team) | Q(away=selected_team)
     ).order_by('date')
-    team_players = Player.objects.filter(team=selected_team).order_by('-photo')
+    team_players = Player.objects.filter(team=selected_team).order_by('-photo').order_by('number')
+
+    team_league_standings = Standings.objects.filter(league=selected_team.league).order_by('position')
 
 
     return render(request, "football/team_details.html", {
         "team":selected_team,
         "matches":team_matches,
-        "players":team_players
+        "players":team_players,
+        "standings":team_league_standings
     })
 
 def top_scorers(request, league_id):
@@ -118,6 +123,3 @@ def top_scorers(request, league_id):
         })
 
     return JsonResponse({"scorers": data})
-
-def match_details(request, match_id):
-    return render("football/match_details.html")

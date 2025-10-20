@@ -52,7 +52,7 @@ window.addEventListener('DOMContentLoaded', event => {
                     const row = `
                     <tr>
                         <td>${item.position}</td>
-                        <td><img src='${item.logo}' width="25"> ${item.name}</td>
+                        <td><a href="${item.team_id}" style="text-decoration: none; color:black;"><img src='${item.logo}' width="25"> ${item.name}</a></td>
                         <td>${item.played}</td>
                         <td>${item.wins}</td>
                         <td>${item.draws}</td>
@@ -72,92 +72,126 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
     // Handle nav tab clicks
-    document.querySelectorAll("#select_content .nav-link").forEach(link => {
+    const navLinks = document.querySelectorAll("#select_content .nav-link");
+    const sections = document.querySelectorAll(".section");
+
+    // Get saved tab from storage
+    const savedTab = localStorage.getItem("activeMainTab");
+
+    // Hide all sections first
+    sections.forEach(sec => sec.style.display = "none");
+
+    if (savedTab) {
+        // If user has a previous tab saved, restore it
+        const defaultSection = document.querySelector(`#${savedTab}-section`);
+        if (defaultSection) defaultSection.style.display = "block";
+
+        navLinks.forEach(link => {
+            link.classList.toggle("active", link.dataset.section === savedTab);
+        });
+    } else {
+        // If no previous tab, keep all sections hidden and none active
+        navLinks.forEach(link => link.classList.remove("active"));
+    }
+
+    // ✅ Same event listener logic for tab switching
+    navLinks.forEach(link => {
         link.addEventListener("click", function (e) {
             e.preventDefault();
             const clicked = e.currentTarget;
-            console.log("Switching to:", this.dataset.section);
+            const section = this.dataset.section;
 
             if (!selected_league_id) {
                 alert("Please select a league first!");
                 return;
             }
 
-            // Update active tab
-            document.querySelectorAll("#select_content .nav-link")
-                .forEach(nav => nav.classList.remove("active"));
+            console.log("Switching to:", section);
+
+            // Save selected tab
+            localStorage.setItem("activeMainTab", section);
+
+            // Update active nav
+            navLinks.forEach(nav => nav.classList.remove("active"));
             clicked.classList.add("active");
 
-
             // Hide all sections
-            document.querySelectorAll(".section")
-                .forEach(section => section.style.display = "none");
+            sections.forEach(sec => sec.style.display = "none");
 
-            // Show selected section
-            const sectionToShow = document.querySelector(`#${this.dataset.section}-section`);
+            // Show the clicked section
+            const sectionToShow = document.querySelector(`#${section}-section`);
             if (sectionToShow) sectionToShow.style.display = "block";
 
-
-            // Load standings if “table” tab
-            if (this.dataset.section === "standings") {
+            // Load appropriate data
+            if (section === "standings") {
                 loadStandings(selected_league_id);
-            }
-
-            // Load matches if “matches” tab
-            if (this.dataset.section === "matches") {
-                const matchdaySelect = document.querySelector("#matchday_select")
+            } else if (section === "matches") {
+                const matchdaySelect = document.querySelector("#matchday_select");
                 if (matchdaySelect && matchdaySelect.value && selected_league_id) {
                     loadMatches(matchdaySelect.value);
                 } else {
                     console.warn("No matchday selected or found.");
                 }
+            } else if (section === "teams") {
+                loadTeams(selected_league_id);
+            } else if (section === "top_scorers") {
+                loadScorers(selected_league_id);
             }
+        });
+    });
 
-            // Load teams if "teams" tab
-            if (this.dataset.section === "teams") {
-                loadTeams(selected_league_id)
-            }
 
-            if (this.dataset.section === "top_scorers") {
-                loadScorers(selected_league_id)
-            }
+    //  Handle back navigation
+    window.addEventListener("pageshow", () => {
+        const savedTab = localStorage.getItem("activeMainTab");
+        const sections = document.querySelectorAll(".section");
+        const navLinks = document.querySelectorAll("#select_content .nav-link");
+
+        // Hide all first
+        sections.forEach(sec => sec.style.display = "none");
+
+        // Show only the previously active one
+        const sectionToShow = document.querySelector(`#${savedTab}-section`);
+        if (sectionToShow) sectionToShow.style.display = "block";
+
+        // Fix nav state
+        navLinks.forEach(link => {
+            link.classList.toggle("active", link.dataset.section === savedTab);
         });
     });
 
     // Handle league selection
     if (leagueSelect) {
         leagueSelect.addEventListener("change", function () {
-            selected_league_id = this.value;
-            console.log("Selected League:", selected_league_id);
+        selected_league_id = this.value;
+        console.log("Selected League:", selected_league_id);
 
-            const standingsSection = document.querySelector("#standings-section");
-            const matchdaySection = document.querySelector("#matches-section");
-            const teamsSection = document.querySelector("#teams-section");
+        // Hide all sections first
+        sections.forEach(sec => sec.style.display = "none");
 
-            // If currently viewing standings, reload table
-            if (standingsSection && standingsSection.style.display !== "none") {
+        // Show only the active tab section
+        const savedTab = localStorage.getItem("activeMainTab") || "standings";
+        const sectionToShow = document.querySelector(`#${savedTab}-section`);
+        if (sectionToShow) sectionToShow.style.display = "block";
+
+        // Load data for that section
+        switch (savedTab) {
+            case "standings":
                 loadStandings(selected_league_id);
-            }
-
-            // If currently viewing matches, reload matches automatically
-            if (matchdaySection && matchdaySection.style.display !== "none") {
+                break;
+            case "matches":
                 if (matchdaySelect && matchdaySelect.value) {
                     loadMatches(matchdaySelect.value);
-                } else {
-                    matchesContent.innerHTML = "<p>Please select a matchday.</p>";
-                };
-            } ;
-
-            // If currently viewing teams reload teams
-            if (teamsSection && teamsSection.style.display !== "none") {
-                loadTeams(selected_league_id)
-            }
-
-            // If currently viewing topscorers reload teams
-            if (scorersSection && selected_league_id) {
+                }
+                break;
+            case "teams":
+                loadTeams(selected_league_id);
+                break;
+            case "top_scorers":
                 loadScorers(selected_league_id);
-            }
-        });
+                break;
+        }
+    });
     }
 
     window.addEventListener("load", () => {
@@ -235,7 +269,12 @@ window.addEventListener('DOMContentLoaded', event => {
                             <strong>${item.away_score ?? ''}</strong> 
                             ${item.away} <img src="${item.away_logo || ''}" width="25">
                         </p>
-                        <p><a href='#'>View Match Details</a></p>
+                        <p class="mb-0 text-warning small d-flex align-items-center justify-content-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whistle me-2" viewBox="0 0 16 16">
+                                <path d="M10 1a1 1 0 0 0-1 1v1H5a2 2 0 0 0-2 2v2.5l-.447.894A1 1 0 0 0 2 9v3a1 1 0 0 0 1 1h1v1a1 1 0 0 0 1 1h2.586a1 1 0 0 0 .707-.293l4.414-4.414a1 1 0 0 0 .293-.707V2a1 1 0 0 0-1-1H10zm-1 2v8.586L6.414 14H5v-1h1a1 1 0 0 0 1-1V3h3z"/>
+                            </svg>
+                            Referee: <span class="fw-semibold">${item.referee}</span>
+                        </p>
                     </div>
                 `;
                 matchesContent.insertAdjacentHTML("beforeend", match);
@@ -369,5 +408,70 @@ window.addEventListener('DOMContentLoaded', event => {
 
     backBtn.addEventListener('click', () => updateMatchdaySelect(-1));
     forwardBtn.addEventListener('click', () => updateMatchdaySelect(1));
+
+    window.addEventListener("pageshow", (event) => {
+        const savedLeague = localStorage.getItem("selectedLeague");
+        const savedTab = localStorage.getItem("activeMainTab");
+        const savedMatchday = localStorage.getItem("selectedMatchday");
+
+        // Restore league selection
+        if (savedLeague && leagueSelect) {
+            leagueSelect.value = savedLeague;
+            selected_league_id = savedLeague;
+        }
+
+        // Hide all sections first
+        sections.forEach(sec => sec.style.display = "none");
+
+        // Show the previously active section
+        if (savedTab) {
+            const sectionToShow = document.querySelector(`#${savedTab}-section`);
+            if (sectionToShow) sectionToShow.style.display = "block";
+
+            // Update nav links
+            navLinks.forEach(link => {
+                link.classList.toggle("active", link.dataset.section === savedTab);
+            });
+
+            // Load data for that tab
+            switch (savedTab) {
+                case "standings":
+                    loadStandings(selected_league_id);
+                    break;
+                case "matches":
+                    if (matchdaySelect && savedMatchday) {
+                        matchdaySelect.value = savedMatchday;
+                        loadMatches(savedMatchday);
+                    }
+                    break;
+                case "teams":
+                    loadTeams(selected_league_id);
+                    break;
+                case "top_scorers":
+                    loadScorers(selected_league_id);
+                    break;
+            }
+        }
+    });
+
+    // Save league and matchday whenever they change
+    leagueSelect.addEventListener("change", function () {
+        selected_league_id = this.value;
+        localStorage.setItem("selectedLeague", selected_league_id);
+    });
+
+    if (matchdaySelect) {
+        matchdaySelect.addEventListener("change", function () {
+            localStorage.setItem("selectedMatchday", this.value);
+        });
+    }
+
+    // Save active tab whenever user switches tabs
+    navLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            const section = this.dataset.section;
+            localStorage.setItem("activeMainTab", section);
+        });
+    });
 
 });

@@ -10,7 +10,7 @@
 
     <!-- Back Button -->
     <p class="mb-4">
-        <a href="javascript:history.back()" class="text-decoration-none">
+        <a href="{% url 'football:index' %}" class="text-decoration-none">
             &laquo; Back
         </a>
     </p>
@@ -75,7 +75,12 @@
                                     </div>
                                 </div>
 
-                                <a href="#" class="btn btn-sm btn-outline-light mt-2 rounded-pill px-3">View Match Details</a>
+                                <p class="mb-0 text-warning small d-flex align-items-center justify-content-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whistle me-2" viewBox="0 0 16 16">
+                                        <path d="M10 1a1 1 0 0 0-1 1v1H5a2 2 0 0 0-2 2v2.5l-.447.894A1 1 0 0 0 2 9v3a1 1 0 0 0 1 1h1v1a1 1 0 0 0 1 1h2.586a1 1 0 0 0 .707-.293l4.414-4.414a1 1 0 0 0 .293-.707V2a1 1 0 0 0-1-1H10zm-1 2v8.586L6.414 14H5v-1h1a1 1 0 0 0 1-1V3h3z"/>
+                                    </svg>
+                                    Referee: <span class="fw-semibold">{{ match.referee|default:"N/A" }}</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -90,7 +95,53 @@
 
     <!-- Standings Section -->
     <div id="standings_team-section" class="team_section">
-        <!-- Will be dynamically filled -->
+        <table class="table table-bordered" id="standingsTable">
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Played</th>
+                    <th>W</th>
+                    <th>D</th>
+                    <th>L</th>
+                    <th>Pts</th>
+                    <th>GF</th>
+                    <th>GA</th>
+                    <th>GD</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for standing in standings %}
+                    {% if standing.team.id == team.id %}
+                        <tr class="table-secondary">
+                        <td>{{standing.position}}</td>
+                        <td><a href="{% url 'football:team_details' standing.team.id %}" style="text-decoration: none; color:black;"><img src='{{standing.team.logo}}' width="25"> {{standing.team.name}}</a></td>
+                        <td>{{standing.played}}</td>
+                        <td>{{standing.wins}}</td>
+                        <td>{{standing.draws}}</td>
+                        <td>{{standing.lost}}</td>
+                        <td>{{standing.points}}</td>
+                        <td>{{standing.goalsFor}}</td>
+                        <td>{{standing.goalsAgainst}}</td>
+                        <td>{{standing.goalDifference}}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>{{standing.position}}</td>
+                        <td><a href="{% url 'football:team_details' standing.team.id %}" style="text-decoration: none; color:black;"><img src='{{standing.team.logo}}' width="25"> {{standing.team.name}}</a></td>
+                        <td>{{standing.played}}</td>
+                        <td>{{standing.wins}}</td>
+                        <td>{{standing.draws}}</td>
+                        <td>{{standing.lost}}</td>
+                        <td>{{standing.points}}</td>
+                        <td>{{standing.goalsFor}}</td>
+                        <td>{{standing.goalsAgainst}}</td>
+                        <td>{{standing.goalDifference}}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <!-- Players Section -->
