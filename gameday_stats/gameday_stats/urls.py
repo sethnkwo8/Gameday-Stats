@@ -21,6 +21,5 @@ from . import views
 urlpatterns = [
     path('', views.index, name="index" ),
     path('admin/', admin.site.urls),
-    path('football/', include('football.urls')),
-    path('nba/', include('nba.urls'))
-]
+    path('football/', include('football.urls'))
+    ]

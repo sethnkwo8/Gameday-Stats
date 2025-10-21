@@ -7,6 +7,7 @@ class League(models.Model):
     season = models.CharField(max_length=20)
     api_id_football_data = models.IntegerField(unique=True, null=True)
     current_matchday = models.IntegerField(null=True)
+    total_matchdays = models.PositiveIntegerField(null=True)
 
     def __str__(self):
         return self.name

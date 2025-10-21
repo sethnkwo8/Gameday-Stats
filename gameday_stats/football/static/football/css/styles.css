@@ -112,7 +112,6 @@
     text-decoration: none;
 }
 
-/* General section background */
 #players_team-section {
     background: linear-gradient(180deg, #1a1a1a 0%, #2b2b2b 100%);
     padding: 50px 20px;
@@ -206,3 +205,11 @@
     background-color: #2c2c2c;
 }
 
+.match-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.match-item:hover {
+  background-color: #e9ecef !important;
+  transform: translateY(-2px);
+}

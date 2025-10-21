@@ -164,10 +164,14 @@ window.addEventListener('DOMContentLoaded', event => {
     if (leagueSelect) {
         leagueSelect.addEventListener("change", function () {
         selected_league_id = this.value;
+        localStorage.setItem("selectedLeague", selected_league_id)
         console.log("Selected League:", selected_league_id);
 
         // Hide all sections first
         sections.forEach(sec => sec.style.display = "none");
+
+        // Load matchdays for that league
+        loadMatchdaysForLeague(selected_league_id);
 
         // Show only the active tab section
         const savedTab = localStorage.getItem("activeMainTab") || "standings";
@@ -224,6 +228,40 @@ window.addEventListener('DOMContentLoaded', event => {
     const matchdaySelect = document.querySelector("#matchday_select");
     const matchesContent = document.querySelector("#matches");
 
+    function loadMatchdaysForLeague(leagueId) {
+        if (!leagueId) return;
+
+        fetch(`/football/matchdays/${leagueId}/`)
+            .then(response => response.json())
+            .then(data => {
+                matchdaySelect.innerHTML = ""; // clear old ones
+
+                if (data.error) {
+                    console.error("League not found");
+                    return;
+                }
+
+                data.matchdays.forEach(day => {
+                    const option = document.createElement("option");
+                    option.value = day;
+                    option.textContent = `Matchday ${day}`;
+                    matchdaySelect.appendChild(option);
+                });
+
+                // Auto-select the first matchday or previously saved one
+                const savedMatchday = localStorage.getItem("selectedMatchday");
+                matchdaySelect.value = savedMatchday || data.matchdays[0];
+
+                // Immediately load matches for selected matchday
+                if (selected_league_id && matchdaySelect.value) {
+                    loadMatches(matchdaySelect.value);
+                }
+            })
+            .catch(err => {
+                console.error("Error loading matchdays:", err);
+            });
+    }
+
     if (matchdaySelect) {
         if (selected_league_id && matchdaySelect.value) {
             loadMatches(matchdaySelect.value)
@@ -258,22 +296,33 @@ window.addEventListener('DOMContentLoaded', event => {
 
             data.matches.forEach(item => {
                 const match = `
-                    <div class="match-item mb-3 p-2 border rounded">
-                        <p class="mb-1">
-                            <strong>${item.date}</strong> — ${item.status}
+                    <div class="match-item mb-3 p-3 border rounded-3 shadow-sm" style="background-color: #f4f5f7; color: #1e1e1e;">
+                        <p class="mb-1 text-center">
+                            <strong>${item.date}</strong> — 
+                            <span class="badge 
+                            ${item.status === 'FINISHED' ? 'bg-success' : 
+                                item.status === 'IN_PLAY' ? 'bg-warning text-dark' : 
+                                'bg-secondary'}">
+                            ${item.status}
+                            </span>
                         </p>
-                        <p class="mb-0">
-                            <img src="${item.home_logo || ''}" width="25"> ${item.home} 
-                            <strong>${item.home_score ?? ''}</strong> 
+
+                        <p class="mb-2 text-center fs-5 fw-semibold d-flex align-items-center justify-content-center">
+                            <img src="${item.home_logo || ''}" width="40" height="40" class="me-2 rounded-circle border border-light">
+                            ${item.home} 
+                            <strong class="mx-2">${item.home_score ?? ''}</strong> 
                             vs 
-                            <strong>${item.away_score ?? ''}</strong> 
-                            ${item.away} <img src="${item.away_logo || ''}" width="25">
+                            <strong class="mx-2">${item.away_score ?? ''}</strong> 
+                            ${item.away}
+                            <img src="${item.away_logo || ''}" width="40" height="40" class="ms-2 rounded-circle border border-light">
                         </p>
+
                         <p class="mb-0 text-warning small d-flex align-items-center justify-content-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whistle me-2" viewBox="0 0 16 16">
-                                <path d="M10 1a1 1 0 0 0-1 1v1H5a2 2 0 0 0-2 2v2.5l-.447.894A1 1 0 0 0 2 9v3a1 1 0 0 0 1 1h1v1a1 1 0 0 0 1 1h2.586a1 1 0 0 0 .707-.293l4.414-4.414a1 1 0 0 0 .293-.707V2a1 1 0 0 0-1-1H10zm-1 2v8.586L6.414 14H5v-1h1a1 1 0 0 0 1-1V3h3z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                class="bi bi-whistle me-2" viewBox="0 0 16 16">
+                            <path d="M10 1a1 1 0 0 0-1 1v1H5a2 2 0 0 0-2 2v2.5l-.447.894A1 1 0 0 0 2 9v3a1 1 0 0 0 1 1h1v1a1 1 0 0 0 1 1h2.586a1 1 0 0 0 .707-.293l4.414-4.414a1 1 0 0 0 .293-.707V2a1 1 0 0 0-1-1H10zm-1 2v8.586L6.414 14H5v-1h1a1 1 0 0 0 1-1V3h3z"/>
                             </svg>
-                            Referee: <span class="fw-semibold">${item.referee}</span>
+                            Referee: <span class="fw-semibold text-dark ms-1">${item.referee || '—'}</span>
                         </p>
                     </div>
                 `;

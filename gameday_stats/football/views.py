@@ -107,7 +107,7 @@ def teams_details(request, team_id):
 
 def top_scorers(request, league_id):
     selected_league = League.objects.get(api_id_football_data = league_id)
-    scorers = Top_Scorers.objects.filter(league=selected_league)
+    scorers = Top_Scorers.objects.filter(league=selected_league)[:10]
 
     data = []
     for scorer in scorers:
@@ -123,3 +123,12 @@ def top_scorers(request, league_id):
         })
 
     return JsonResponse({"scorers": data})
+
+def get_matchdays(request, league_id):
+    try:
+        league = League.objects.get(api_id_football_data=league_id)
+        total = league.total_matchday or 38  # fallback
+        matchdays = list(range(1, total + 1))
+        return JsonResponse({"matchdays": matchdays})
+    except League.DoesNotExist:
+        return JsonResponse({"error": "League not found"}, status=404)

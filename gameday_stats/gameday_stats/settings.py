@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'football',
-    'nba',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
