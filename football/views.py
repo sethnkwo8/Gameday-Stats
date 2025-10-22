@@ -134,3 +134,10 @@ def get_matchdays(request, league_id):
         return JsonResponse({"matchdays": matchdays})
     except League.DoesNotExist:
         return JsonResponse({"error": "League not found"}, status=404)
+    
+    from django.http import HttpResponse
+from django.core.management import call_command
+
+def load_data_view(request):
+    call_command("load_data")
+    return HttpResponse("Data loaded successfully!")
