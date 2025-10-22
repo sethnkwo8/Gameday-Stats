@@ -83,10 +83,11 @@ WSGI_APPLICATION = 'gameday_stats.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DATABASE_URL = os.environ.get("POSTGRES_DB_URL")  # production / Render
+# DATABASE_URL = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"   # uncomment for local SQLite
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
-    )
+    "default": dj_database_url.parse(DATABASE_URL)
 }
 
 

@@ -30,7 +30,7 @@ class Team(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=50, null=True)
-    position = models.CharField(max_length=15, null=True)
+    position = models.CharField(max_length=30, null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team")
     age = models.IntegerField(null=True)
     number = models.IntegerField(null=True)
