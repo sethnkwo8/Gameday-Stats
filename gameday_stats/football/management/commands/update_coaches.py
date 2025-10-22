@@ -3,6 +3,9 @@ from django.core.management.base import BaseCommand
 from football.models import League, Team
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 API_KEY = os.getenv("FOOTBALL_DATA_API_KEY")
 HEADERS = {"X-Auth-Token": API_KEY}

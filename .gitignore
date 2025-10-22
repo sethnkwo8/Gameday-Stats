@@ -33,3 +33,6 @@ media/
 
 # Static Files
 /staticfiles/
+
+# Celery schedule files
+celerybeat-schedule*

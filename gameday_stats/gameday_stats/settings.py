@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from pathlib import Path
 from celery.schedules import crontab
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-or#n822#5lrp-kj!-s^4e3b7ce$4vrw$uwws$2$u52ewb3uu=)'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -124,10 +128,32 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Periodic schedule for CELERY
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
 CELERY_BEAT_SCHEDULE = {
-    'update-standings-every-hour': {
-        'task' : 'football.task.update_standings_task',
-        'schedule' : crontab(minute=0, hour='*')
-    }
+    'update-coaches-daily': {
+        'task': 'yourapp.tasks.update_coaches_task',
+        'schedule': 60 * 60 * 12,  # every 12 hours
+    },
+    'update-current-matchday-daily': {
+        'task': 'yourapp.tasks.update_current_matchday_task',
+        'schedule': 60 * 60 * 12,
+    },
+    'update-matches-hourly': {
+        'task': 'yourapp.tasks.update_matches_task',
+        'schedule': 60 * 60,  # every 1 hour
+    },
+    'update-players-daily': {
+        'task': 'yourapp.tasks.update_players_task',
+        'schedule': 60 * 60 * 12,
+    },
+    'update-standings-daily': {
+        'task': 'yourapp.tasks.update_standings_task',
+        'schedule': 60 * 60 * 6,  # every 6 hours
+    },
+    'update-top-scorers-daily': {
+        'task': 'yourapp.tasks.update_top_scorers_task',
+        'schedule': 60 * 60 * 6,
+    },
 }
