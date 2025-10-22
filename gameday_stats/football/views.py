@@ -60,9 +60,11 @@ def matchday(request, league_id, matchday):
         data.append({
             "date": m.date.strftime("%Y-%m-%d %H:%M"),
             "home":m.home.name,
+            "home_id":m.home.pk,
             "home_logo":getattr(m.home, "logo", None),
             "home_score":m.home_score,
             "away": m.away.name,
+            "away_id":m.away.pk,
             "away_logo":getattr(m.away, "logo", None),
             "away_score": m.away_score,
             "status": m.status,

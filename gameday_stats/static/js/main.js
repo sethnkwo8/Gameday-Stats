@@ -308,13 +308,13 @@ window.addEventListener('DOMContentLoaded', event => {
                         </p>
 
                         <p class="mb-2 text-center fs-5 fw-semibold d-flex align-items-center justify-content-center">
-                            <img src="${item.home_logo || ''}" width="40" height="40" class="me-2 rounded-circle border border-light">
-                            ${item.home} 
+                            <a href="${item.home_id}" style="text-decoration: none; color:black;"><img src="${item.home_logo || ''}" width="40" height="40" class="me-2 rounded-circle border border-light">
+                            ${item.home}</a>
                             <strong class="mx-2">${item.home_score ?? ''}</strong> 
                             vs 
                             <strong class="mx-2">${item.away_score ?? ''}</strong> 
-                            ${item.away}
-                            <img src="${item.away_logo || ''}" width="40" height="40" class="ms-2 rounded-circle border border-light">
+                            <a href="${item.away_id}" style="text-decoration: none; color:black;">${item.away}
+                            <img src="${item.away_logo || ''}" width="40" height="40" class="ms-2 rounded-circle border border-light"></a>
                         </p>
 
                         <p class="mb-0 text-warning small d-flex align-items-center justify-content-center">
