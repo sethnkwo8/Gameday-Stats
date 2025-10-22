@@ -2,7 +2,7 @@ services:
   - type: web
     name: gameday-stats
     env: python
-    rootDir: GAMEDAY-STATS        # 👈 Folder where your build.sh and manage.py are
+    rootDir: GAMEDAY-STATS        
     plan: free
     buildCommand: "cd Gameday-Stats && ./build.sh"
     startCommand: "gunicorn gameday_stats.wsgi"
