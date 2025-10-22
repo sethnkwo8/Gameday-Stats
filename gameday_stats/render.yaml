@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gameday-stats
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn gameday_stats.wsgi"
+    envVars:
+      - key: DEBUG
+        value: False

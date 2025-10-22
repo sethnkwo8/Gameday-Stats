@@ -11,6 +11,7 @@ click-didyoumean==0.3.1
 click-plugins==1.1.1.2
 click-repl==0.3.0
 cron_descriptor==2.0.6
+dj-database-url==3.0.1
 Django==5.2.7
 django-celery-beat==2.8.1
 django-timezone-field==7.1
@@ -19,6 +20,7 @@ kombu==5.5.4
 packaging==25.0
 pillow==11.3.0
 prompt_toolkit==3.0.52
+psycopg2-binary==2.9.11
 pydantic==2.12.3
 pydantic_core==2.41.4
 python-crontab==3.3.0
