@@ -131,13 +131,13 @@ Below are key screenshots showcasing the main features of the Football Web App:
 
 | Feature | Screenshot | Description |
 |---------|------------|-------------|
-| Home Page | ![Homepage](gameday_stats/screenshots/Homepage.png) | The landing page with navigation and overview of leagues. |
-| Fixtures | ![Fixtures](gameday_stats/screenshots/Matches_Section.png) | Displays upcoming and past matches for selected leagues and matchdays. |
-| Standings | ![Standings](gameday_stats/screenshots/Standings_Section.png) | Shows league table with team positions, points, and stats. |
-| Team Fixtures | ![Team Fixtures](gameday_stats/screenshots/Team_Matches.png) | Fixtures specific to a selected team. |
-| Top Scorers | ![Top Scorers](gameday_stats/screenshots/Top_Scorers_Section.png) | Lists the top goal scorers with goals, assists, and penalties. |
-| Team Players | ![Team Players](gameday_stats/screenshots/Team_players.png) | Shows squad details for a selected team, including coach and venue. |
-| League Teams | ![League Teams](gameday_stats/screenshots/Teams_Section.png) | Shows all the teams in a particular league |
+| Home Page | ![Homepage](screenshots/Homepage.png) | The landing page with navigation and overview of leagues. |
+| Fixtures | ![Fixtures](screenshots/Matches_Section.png) | Displays upcoming and past matches for selected leagues and matchdays. |
+| Standings | ![Standings](screenshots/Standings_Section.png) | Shows league table with team positions, points, and stats. |
+| Team Fixtures | ![Team Fixtures](screenshots/Team_Matches.png) | Fixtures specific to a selected team. |
+| Top Scorers | ![Top Scorers](screenshots/Top_Scorers_Section.png) | Lists the top goal scorers with goals, assists, and penalties. |
+| Team Players | ![Team Players](screenshots/Team_players.png) | Shows squad details for a selected team, including coach and venue. |
+| League Teams | ![League Teams](screenshots/Teams_Section.png) | Shows all the teams in a particular league |
 
 ## Distinctiveness and Complexity
 
