@@ -15,15 +15,15 @@ class League(models.Model):
 class Team(models.Model):
     api_id_football_api = models.IntegerField(unique=True, null=True)
     api_id_football_data = models.IntegerField(unique=True, null=True)
-    abbreviation = models.CharField(max_length=4, null=True)
+    abbreviation = models.CharField(max_length=4, blank=True, null=True)
     name = models.CharField(max_length=30)
     league = models.ForeignKey(League, on_delete=models.CASCADE, related_name='league')
     logo = models.URLField(null=True)
-    coach_name = models.CharField(null=True)
-    venue = models.CharField(null=True)
-    founded = models.CharField(null=True)
-    website = models.CharField(null=True)
-    club_colors = models.CharField(null=True)
+    coach_name = models.CharField(max_length=100, blank=True, null=True)
+    venue = models.CharField(max_length=100, blank=True, null=True)
+    founded = models.CharField(max_length=100, blank=True, null=True)
+    website = models.CharField(max_length=100, blank=True, null=True)
+    club_colors = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.name
