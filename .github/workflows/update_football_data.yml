@@ -27,6 +27,7 @@ jobs:
       - name: Run update_matches command
         env:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL}}
         run: python manage.py update_matches
 
 
@@ -47,10 +48,12 @@ jobs:
       - name: Update standings
         env:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL}}
         run: python manage.py update_standings
       - name: Update top scorers
         env:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL}}
         run: python manage.py update_top_scorers
 
 
@@ -71,12 +74,15 @@ jobs:
       - name: Update players
         env:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL}}
         run: python manage.py update_players
       - name: Update coaches
         env:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL}}
         run: python manage.py update_coaches
       - name: Update current matchday
         env:
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL}}
         run: python manage.py update_current_matchday
