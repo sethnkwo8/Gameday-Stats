@@ -36,3 +36,5 @@ media/
 
 # Celery schedule files
 celerybeat-schedule*
+
+data.json
