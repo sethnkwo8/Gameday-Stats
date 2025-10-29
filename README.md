@@ -1,9 +1,41 @@
 # 🏟️ Gameday Stats
 
 **Gameday Stats** is a full-stack web application built with **Django** that provides live football (soccer) data — including fixtures, scores, standings, and player statistics — for the **top five European leagues**:  
-**Premier League**, **La Liga**, **Serie A**, **Bundesliga**, and **Ligue 1**. The reason I decided to develop this project is to be able to keep up with the ongoing football season and always stay up to date.
+**Premier League**, **La Liga**, **Serie A**, **Bundesliga**, and **Ligue 1**.
 
 This project was developed as the **Final Project** for **CS50’s Web Programming with Python and JavaScript (CS50W)**.
+
+---
+
+##  Overview
+
+Gameday Stats enables football fans to keep up with ongoing seasons through real-time data fetched
+from multiple APIs. The project integrates **two data providers** — **API-Football** and **Football-Data.org** — and automatically updates results, fixtures, and player statistics via **GitHub Actions** (used instead of Celery due to hosting limitations on Render).
+
+---
+
+## Distinctiveness and Complexity
+Gameday Stats is different from the other projects in this course because it focuses on real-time sports data and brings together several technologies to make that possible. Instead of simply storing user input like a to-do list or social network, this project connects to live football data APIs and updates its database automatically. It’s designed to feel like a real sports tracking platform, where users can see fixtures, scores, standings, and player stats across major European leagues — something far more dynamic than the earlier projects in the course.
+
+One thing that makes this project more complex is the amount of data it handles and how that data is kept up to date. Rather than manually entering information, the app fetches data from two APIs, processes it, and stores it in a PostgreSQL database. It also uses GitHub Actions to automatically update the site on a schedule, so the information stays fresh without me having to run commands myself. This was challenging to set up, especially when figuring out how to make different services work together in a deployed environment.
+
+Finally, this project shows a full understanding of what goes into creating and maintaining a complete web application — from backend logic and database design to front-end presentation and automation. It was built from scratch and not based on any previous assignment. Each part — the models, API integration, data updates, and interface — was written and connected by me. Overall, Gameday Stats combines everything I learned throughout the course into one cohesive and functional app, showing both distinctiveness and real-world complexity.
+
+I decided to build Gameday Stats because I’m a big football fan and wanted a personal project that connects my interest in the sport with what I’ve learned in web development. This made it more engaging to build and helped me understand how professional sports platforms manage and update real-time data.
+
+---
+
+## 🗂 File Breakdown
+
+- `models.py`: Data models for leagues, teams, players, matches 
+- `views.py`: Handles data display and logic 
+- `tasks.py`: GitHub Action-triggered data update helpers 
+- `.github/workflows/update.yml`: Automated scheduled updates 
+- `management/commands/`: Custom update commands 
+- `settings.py`: Config, environment, and database setup 
+- `templates/football/`: HTML templates 
+- `static/football/`: CSS, JS, and images 
+- `requirements.txt`: Lists all dependencies for deployment 
 
 ---
 
@@ -24,11 +56,19 @@ This project was developed as the **Final Project** for **CS50’s Web Programmi
 |-----------|--------|
 | **Frontend** | HTML, CSS, Bootstrap, JavaScript |
 | **Backend** | Django (Python) |
-| **Task Queue** | Celery + Celery Beat |
-| **Broker** | Redis |
-| **Database** | SQLite (Development) |
+| **Database** | PostgreSQL |
 | **APIs** | [API-Football](https://www.api-football.com/) and [Football-Data.org](https://www.football-data.org/) |
 | **Version Control** | Git & GitHub |
+| **Automation** | Github Actions |
+| **Deployment** | Render |
+
+---
+
+## 🌐 Live Demo
+
+You can explore the live version of **Gameday Stats** hosted on Render:
+
+🔗 **[https://gameday-stats.onrender.com](https://gameday-stats.onrender.com)**
 
 ---
 
@@ -63,8 +103,11 @@ pip install -r requirements.txt
 **Step 4 – Set Up Environment Variables**
 Create a .env file in your project root and add:
 ```bash
+SECRET_KEY=your_secret_key
+DEBUG=True
 API_FOOTBALL_KEY=your_api_football_key
 FOOTBALL_DATA_KEY=your_football_data_key
+DATABASE_URL=postgresql://<username>:<password>@<host>:<port>/<dbname>
 ```
 
 ---
@@ -77,25 +120,9 @@ python manage.py migrate
 
 ---
 
-**Step 6 – Start Redis (for Celery)**
-Make sure Redis is installed, then run:
+**Step 6 – Load Initial Data**
 ```bash
-redis-server    
-```
-
----
-
-**Step 7 – Start Celery and Celery Beat**
-Open two new terminals in your project folder 
-
-Terminal 1:
-```bash
-celery -A gameday_stats worker -l info
-```
-
-Terminal 2:
-```bash
-celery -A gameday_stats beat -l info
+python manage.py loaddata data.json    
 ```
 
 ---
@@ -111,19 +138,27 @@ http://127.0.0.1:8000/
 
 ## 🧠 How It Works
 
-Gameday Stats integrates **two football APIs** and uses **Celery Beat** to automatically update data on a schedule.
+Gameday Stats integrates **two football APIs** and uses **Github Actions** to automatically update data on a schedule.
 
 | Function | Data Source | Update Method |
 |-----------|--------------|----------------|
-| Fixtures & Live Scores | **API-Football** | Periodically updated with Celery Beat |
+| Fixtures & Live Scores | **API-Football** | Periodically updated |
 | Player & Team Stats | **API-Football** | Fetched on demand or scheduled |
-| League Standings | **Football-Data.org** | Updated daily with Celery task |
+| League Standings | **Football-Data.org** | Updated daily |
 | Historical Data | **Football-Data.org** | Optional background fetch |
-
-**Celery Beat** runs background tasks at set intervals (e.g., every 30 minutes) to refresh scores and standings.  
-This ensures users always see updated data without manually refreshing API calls.  
+  
 
 ---
+
+## 🔁 Automated Data Updates (Github Actions)
+
+Since Redis and Celery aren’t available on Render’s free plan, GitHub Actions are configured to automatically:
+
+- Run scheduled manage.py commands
+- Fetch latest fixtures, standings, and player stats
+- Commit changes or trigger webhooks if needed
+
+This ensures Gameday Stats remains up-to-date even after deployment.
 
 ## 🖼️ Project Screenshots
 
@@ -137,21 +172,9 @@ Below are key screenshots showcasing the main features of the Football Web App:
 | Team Fixtures | ![Team Fixtures](screenshots/Team_Matches.png) | Fixtures specific to a selected team. |
 | Top Scorers | ![Top Scorers](screenshots/Top_Scorers_Section.png) | Lists the top goal scorers with goals, assists, and penalties. |
 | Team Players | ![Team Players](screenshots/Team_players.png) | Shows squad details for a selected team, including coach and venue. |
-| League Teams | ![League Teams](screenshots/Teams_Section.png) | Shows all the teams in a particular league |
-
-## Distinctiveness and Complexity
-
-This project satisfies all CS50W Final Project requirements:
-
-- ✅ Django-based web application  
-- ✅ Database models and migrations  
-- ✅ Dynamic routes and templates  
-- ✅ Integration with multiple external APIs  
-- ✅ Implementation of background tasks using Celery Beat  
-- ✅ Includes a video demonstration  
+| League Teams | ![League Teams](screenshots/Teams_Section.png) | Shows all the teams in a particular league | 
 
 ---
-
 ## 🎥 Video Demo
 
 🎬 Watch the project walkthrough here:  
@@ -173,7 +196,8 @@ This project satisfies all CS50W Final Project requirements:
 Special thanks to:
 - The **CS50 Team** for an incredible course and guidance  
 - **API-Football** and **Football-Data.org** for providing reliable football data APIs  
-- **Celery** and **Redis** for simplifying background scheduling and asynchronous tasks  
+- **Github Actions** for automation and continuous deployment support 
+- **Render** for hosting
 
 ---
 
