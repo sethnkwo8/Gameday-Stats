@@ -433,30 +433,55 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
     // Back and forward button
+    const current_matchdayBtn = document.querySelector('#button_current_matchday');
     const backBtn = document.querySelector('#back_button');
-    const forwardBtn = document.querySelector('#forward_button')
+    const forwardBtn = document.querySelector('#forward_button');
 
-    if (!matchdaySelect || !backBtn || !forwardBtn) return;
+    if (current_matchdayBtn && backBtn && forwardBtn && matchdaySelect) {
 
-    function updateMatchdaySelect(offset) {
-        let currentIndex = matchdaySelect.selectedIndex;
-        let newIndex = currentIndex + offset
+        function updateMatchdaySelect(offset) {
+            let currentIndex = matchdaySelect.selectedIndex;
+            let newIndex = currentIndex + offset;
 
-        // If out of bounds
-        if (newIndex < 0) {
-            newIndex = matchdaySelect.options.length - 1;
-        } else if (newIndex >= matchdaySelect.options.length) {
-            newIndex = 0;
+            if (newIndex < 0) newIndex = matchdaySelect.options.length - 1;
+            else if (newIndex >= matchdaySelect.options.length) newIndex = 0;
+
+            matchdaySelect.selectedIndex = newIndex;
+            matchdaySelect.dispatchEvent(new Event("change"));
         }
 
-        matchdaySelect.selectedIndex = newIndex;
+        backBtn.addEventListener('click', () => updateMatchdaySelect(-1));
+        forwardBtn.addEventListener('click', () => updateMatchdaySelect(1));
 
-        const event = new Event("change");
-        matchdaySelect.dispatchEvent(event);
+        current_matchdayBtn.addEventListener('click', () => {
+            if (!selected_league_id) {
+                alert("Please select a league first!");
+                return;
+            }
+
+            fetch(`/football/current_matchday/${selected_league_id}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Current matchday data:", data);
+                const currentMatchday = data.currentMatchday;
+                if (!currentMatchday) {
+                    alert("No matchday data found!");
+                    return;
+                }
+
+                const index = Array.from(matchdaySelect.options)
+                    .findIndex(opt => opt.value == currentMatchday);
+
+                if (index !== -1) {
+                    matchdaySelect.selectedIndex = index;
+                    matchdaySelect.dispatchEvent(new Event("change"));
+                } else {
+                    alert("Matchday not found in dropdown!");
+                }
+            })
+            .catch(err => console.error("Error fetching current matchday:", err));
+        });
     }
-
-    backBtn.addEventListener('click', () => updateMatchdaySelect(-1));
-    forwardBtn.addEventListener('click', () => updateMatchdaySelect(1));
 
     window.addEventListener("pageshow", (event) => {
         const savedLeague = localStorage.getItem("selectedLeague");
