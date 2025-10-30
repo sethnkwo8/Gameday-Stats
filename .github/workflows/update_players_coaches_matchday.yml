@@ -1,0 +1,33 @@
+name: ⚽ Update Players, Coaches, and Matchday
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # Every 12 hours
+  workflow_dispatch:
+
+jobs:
+  update_players_coaches_matchday:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Update players
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python manage.py update_players
+      - name: Update coaches
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python manage.py update_coaches
+      - name: Update current matchday
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python manage.py update_current_matchday

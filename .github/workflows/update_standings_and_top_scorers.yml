@@ -1,0 +1,28 @@
+name: ⚽ Update Standings and Top Scorers
+
+on:
+  schedule:
+    - cron: "0 */8 * * *"   # Every 8 hours
+  workflow_dispatch:
+
+jobs:
+  update_standings_and_top_scorers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Update standings
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python manage.py update_standings
+      - name: Update top scorers
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python manage.py update_top_scorers
