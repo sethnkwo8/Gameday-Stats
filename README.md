@@ -60,7 +60,7 @@ I decided to build Gameday Stats because I’m a big football fan and wanted a p
 | **APIs** | [API-Football](https://www.api-football.com/) and [Football-Data.org](https://www.football-data.org/) |
 | **Version Control** | Git & GitHub |
 | **Automation** | Github Actions |
-| **Deployment** | Render | (Disabled)
+| **Deployment** | Render (Disabled) |
 
 ---
 
