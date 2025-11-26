@@ -60,15 +60,17 @@ I decided to build Gameday Stats because I’m a big football fan and wanted a p
 | **APIs** | [API-Football](https://www.api-football.com/) and [Football-Data.org](https://www.football-data.org/) |
 | **Version Control** | Git & GitHub |
 | **Automation** | Github Actions |
-| **Deployment** | Render |
+| **Deployment** | Render | (Disabled)
 
 ---
 
 ## 🌐 Live Demo
 
-You can explore the live version of **Gameday Stats** hosted on Render:
-
+Before:
 🔗 **[https://gameday-stats.onrender.com](https://gameday-stats.onrender.com)**
+
+After:
+Live demo: Temporarily offline (Render free tier expired). App runs locally with PostgreSQL.
 
 ---
 
@@ -197,7 +199,7 @@ Special thanks to:
 - The **CS50 Team** for an incredible course and guidance  
 - **API-Football** and **Football-Data.org** for providing reliable football data APIs  
 - **Github Actions** for automation and continuous deployment support 
-- **Render** for hosting
+- **Render** for hosting (previously)
 
 ---
 
